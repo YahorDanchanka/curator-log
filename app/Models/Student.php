@@ -38,4 +38,9 @@ class Student extends Model
     {
         return $this->hasMany(Violation::class);
     }
+
+    public function recommendations()
+    {
+        return $this->hasMany(Recommendation::class);
+    }
 }

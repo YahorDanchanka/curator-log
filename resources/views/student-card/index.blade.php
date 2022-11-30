@@ -103,7 +103,7 @@
                     7. Паспортные данные
                 </div>
                 <div class="text-field__value">
-                        {{ $student->passport_data }}
+                    {{ $student->passport_data }}
                 </div>
             </div>
             <div class="text-field">
@@ -180,12 +180,12 @@
             15. Поощрения учащегося:
             <div class="table-responsive">
                 <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th>Дата</th>
-                        <th>За какие достижения</th>
-                        <th>Форма поощрения</th>
-                    </tr>
+                    <thead class="text-center">
+                        <tr>
+                            <th>Дата</th>
+                            <th>За какие достижения</th>
+                            <th>Форма поощрения</th>
+                        </tr>
                     </thead>
                     <tbody>
                     @foreach($student->achievements as $achievement)
@@ -201,13 +201,13 @@
             16. Факты ассоциального поведения учащегося
             <div class="table-responsive">
                 <table class="table table-bordered">
-                    <thead>
-                    <tr>
-                        <th>Дата</th>
-                        <th>Характер проявления</th>
-                        <th>Меры</th>
-                        <th>Результат</th>
-                    </tr>
+                    <thead class="text-center">
+                        <tr>
+                            <th>Дата</th>
+                            <th>Характер проявления</th>
+                            <th>Меры</th>
+                            <th>Результат</th>
+                        </tr>
                     </thead>
                     <tbody>
                     @foreach($student->violations as $violation)
@@ -216,6 +216,28 @@
                             <td>{{ $violation->actions }}</td>
                             <td>{{ $violation->measures }}</td>
                             <td>{{ $violation->result }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <h2 class="text-center">Рекомендации специалистов</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="text-center">
+                        <tr>
+                            <th>
+                                Рекомендации педагога-психолога, педагога социального<br>
+                                (психологическая диагностика, консультирование)
+                            </th>
+                            <th>Результат</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($student->recommendations as $recommendation)
+                        <tr>
+                            <td>{{ $recommendation->recommendation }}</td>
+                            <td>{{ $recommendation->result }}</td>
                         </tr>
                     @endforeach
                     </tbody>
