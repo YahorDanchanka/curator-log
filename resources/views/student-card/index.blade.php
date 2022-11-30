@@ -243,6 +243,48 @@
                     </tbody>
                 </table>
             </div>
+            <h2 class="text-center">Индивидуальная работа с родителями (другими законными представителями)</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="text-center">
+                        <tr>
+                            <th>Дата</th>
+                            <th>Содержание работы</th>
+                            <th>Результат</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($student->individualWork->where('type', \App\Models\IndividualWork::TYPE_PARENT) as $individualWork)
+                        <tr>
+                            <td>{{ $individualWork->date }}</td>
+                            <td>{{ $individualWork->content }}</td>
+                            <td>{{ $individualWork->result }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+            <h2 class="text-center">Индивидуальная работа с учащимися</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="text-center">
+                    <tr>
+                        <th>Дата</th>
+                        <th>Содержание работы</th>
+                        <th>Результат</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($student->individualWork->where('type', \App\Models\IndividualWork::TYPE_STUDENT) as $individualWork)
+                        <tr>
+                            <td>{{ $individualWork->date }}</td>
+                            <td>{{ $individualWork->content }}</td>
+                            <td>{{ $individualWork->result }}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 @endsection

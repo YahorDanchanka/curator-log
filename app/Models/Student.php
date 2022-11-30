@@ -43,4 +43,9 @@ class Student extends Model
     {
         return $this->hasMany(Recommendation::class);
     }
+
+    public function individualWork()
+    {
+        return $this->hasMany(IndividualWork::class);
+    }
 }
