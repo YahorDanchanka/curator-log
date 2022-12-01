@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
+use Inertia\Inertia;
 
 class StudentCardController extends Controller
 {
@@ -14,6 +15,8 @@ class StudentCardController extends Controller
             abort(404);
         }
 
-        return view('student-card.index', compact('student'));
+        $student->load('user', 'achievements', 'violations', 'recommendations', 'individualWork');
+
+        return Inertia::render('StudentCard/Index', compact('student'));
     }
 }
