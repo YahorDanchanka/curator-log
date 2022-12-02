@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -17,12 +18,19 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $sex = fake()->numberBetween(0, 1);
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'remember_token' => Str::random(10),
+            'login' => Str::random(8),
+            'surname' => 'Данченко',
+            'first_name' => $sex === 1 ? fake()->firstNameMale : fake()->firstNameFemale,
+            'middle_name' => $sex === 1 ? 'Игоревич' : 'Игоревна',
+            'birthday' => fake()->dateTimeBetween('-20 years', '-16 years'),
+            'citizenship' => fake()->randomElement(['Беларус', 'Русский', 'Украинец']),
+            'address' => fake()->address,
+            'job' => fake()->jobTitle,
+            'phone_number' => '37544' . fake()->numberBetween(10 ** 6, 9999999),
+            'password' => Hash::make('password'),
         ];
     }
 
