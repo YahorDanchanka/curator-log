@@ -43,3 +43,7 @@ export interface IndividualWork {
   content: string
   result: string
 }
+
+export interface FamilyMember {
+  type: 'mother' | 'father' | 'brother' | 'sister'
+}

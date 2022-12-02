@@ -15,8 +15,7 @@ class StudentCardController extends Controller
             abort(404);
         }
 
-        $student->load('user', 'achievements', 'violations', 'recommendations', 'individualWork');
-
+        $student->load('user', 'achievements', 'violations', 'recommendations', 'individualWork', 'familyMembers');
         return Inertia::render('StudentCard/Index', compact('student'));
     }
 }

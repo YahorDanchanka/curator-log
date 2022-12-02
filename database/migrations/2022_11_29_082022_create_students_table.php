@@ -17,8 +17,6 @@ return new class extends Migration
             $table->string('address');
             $table->string('health');
             $table->string('other_details')->nullable();
-            $table->foreignId('mother_id')->nullable()->constrained('users');
-            $table->foreignId('father_id')->nullable()->constrained('users');
             $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });

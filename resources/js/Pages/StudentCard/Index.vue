@@ -39,9 +39,15 @@
       <TextField label="10. Сведения о состоянии здоровья" :value="student.health" />
       11. Сведения о семье: ФИО, дата рождения, гражданство, место жительства и (или) место пребывания, место работы
       родителей или других законных представителей
-      <TextField label="Отец" value="" />
-      <TextField label="Мать" value="" />
-      <TextField label="Другие члены семьи" value="" />
+
+      <TextField v-if="father" label="Отец" :value="UserService.info(father)" />
+      <TextField v-else label="Отец" />
+
+      <TextField v-if="mother" label="Мать" :value="UserService.info(mother)" />
+      <TextField v-else label="Мать" />
+
+      <TextField label="Другие члены семьи" :value="otherFamilyMembersTextField" />
+
       <TextField label="12. Отношения учащегося с членами семьи, попечителем и др." :value="student.relationship" />
       <TextField label="13. Увлечения" :value="student.hobbies" />
       <TextField label="14. Другие сведения" :value="student.other_details" />
@@ -140,8 +146,9 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { Head } from '@inertiajs/inertia-vue3'
-import { Student, User, Achievement, Violation, IndividualWork, Recommendation } from '@/types'
+import { Student, User, Achievement, Violation, IndividualWork, Recommendation, FamilyMember } from '@/types'
 import TextField from '@/components/TextField.vue'
+import { UserService } from '@/services/UserService'
 
 const props = defineProps<{
   student: Student & {
@@ -150,6 +157,7 @@ const props = defineProps<{
     violations: Violation[]
     recommendations: Recommendation[]
     individual_work: IndividualWork[]
+    family_members: (User & { pivot: FamilyMember })[]
   }
 }>()
 
@@ -164,5 +172,39 @@ const parentsIndividualWork = computed<IndividualWork[]>(() =>
 
 const studentsIndividualWork = computed<IndividualWork[]>(() =>
   props.student.individual_work.filter((individualWork) => individualWork.type === 'students')
+)
+
+const familyMembers = computed(() => props.student.family_members)
+
+const mother = computed<(User & { pivot: FamilyMember }) | undefined>(() =>
+  familyMembers.value.find((familyMember) => familyMember.pivot.type === 'mother')
+)
+
+const father = computed<(User & { pivot: FamilyMember }) | undefined>(() =>
+  familyMembers.value.find((familyMember) => familyMember.pivot.type === 'father')
+)
+
+const otherFamilyMembers = computed(() =>
+  familyMembers.value.filter(
+    (familyMember) => familyMember.pivot.type !== 'mother' && familyMember.pivot.type !== 'father'
+  )
+)
+
+const otherFamilyMembersTextField = computed(() =>
+  otherFamilyMembers.value
+    .map((familyMember) => {
+      let status = ''
+
+      if (familyMember.pivot.type === 'brother') {
+        status = 'брат'
+      }
+
+      if (familyMember.pivot.type === 'sister') {
+        status = 'сестра'
+      }
+
+      return `(${status}) ${UserService.info(familyMember)}`
+    })
+    .join('<br>')
 )
 </script>

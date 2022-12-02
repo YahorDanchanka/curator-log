@@ -14,19 +14,9 @@ class Student extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function mother()
+    public function familyMembers()
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function father()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function otherFamilyMembers()
-    {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withPivot('type');
     }
 
     public function achievements()
