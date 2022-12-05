@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('surname');
             $table->string('first_name');
             $table->string('middle_name');
+            $table->enum('sex', ['male', 'female']);
             $table->date('birthday');
             $table->string('citizenship');
-            $table->string('address');
             $table->string('job')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('password');

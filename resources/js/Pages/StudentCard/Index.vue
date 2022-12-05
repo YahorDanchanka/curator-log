@@ -33,17 +33,23 @@
           <TextField label="6. Окончил УО" :value="student.graduated" />
         </div>
       </div>
-      <TextField label="7. Паспортные данные" :value="student.passport_data" />
-      <TextField label="8. Домашний адрес, телефон" :value="addressAndPhone" />
-      <TextField label="9. Место проживания в период обучения" :value="student.address" />
+      <TextField label="7. Паспортные данные" :value="student.passport.to_string" />
+      <TextField
+        label="8. Домашний адрес, телефон"
+        :value="`${student.user.address.to_string}, +${student.user.phone_number}`"
+      />
+      <TextField
+        label="9. Место проживания в период обучения"
+        :value="student.address ? student.address : student.user.address.to_string"
+      />
       <TextField label="10. Сведения о состоянии здоровья" :value="student.health" />
       11. Сведения о семье: ФИО, дата рождения, гражданство, место жительства и (или) место пребывания, место работы
       родителей или других законных представителей
 
-      <TextField v-if="father" label="Отец" :value="UserService.info(father)" />
+      <TextField v-if="student.father" label="Отец" :value="student.father.info" />
       <TextField v-else label="Отец" />
 
-      <TextField v-if="mother" label="Мать" :value="UserService.info(mother)" />
+      <TextField v-if="student.mother" label="Мать" :value="student.mother.info" />
       <TextField v-else label="Мать" />
 
       <TextField label="Другие члены семьи" :value="otherFamilyMembersTextField" />
@@ -144,67 +150,54 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
 import { Head } from '@inertiajs/inertia-vue3'
-import { Student, User, Achievement, Violation, IndividualWork, Recommendation, FamilyMember } from '@/types'
+import {
+  IAchievement,
+  IAddress,
+  IFamilyMember,
+  IIndividualWork,
+  IPassport,
+  IRecommendation,
+  IStudent,
+  IUser,
+  IViolation,
+} from '@/types'
 import TextField from '@/components/TextField.vue'
-import { UserService } from '@/services/UserService'
+import { computed } from 'vue'
 
 const props = defineProps<{
-  student: Student & {
-    user: User
-    achievements: Achievement[]
-    violations: Violation[]
-    recommendations: Recommendation[]
-    individual_work: IndividualWork[]
-    family_members: (User & { pivot: FamilyMember })[]
+  student: IStudent & {
+    user: IUser & { address: IAddress }
+    passport: IPassport
+    achievements: IAchievement[]
+    violations: IViolation[]
+    recommendations: IRecommendation[]
+    individual_work: IIndividualWork[]
+    family_members: (IUser & { pivot: IFamilyMember })[]
   }
 }>()
 
-const addressAndPhone = computed(
-  () =>
-    `${props.student.user.address}, <a href="tel:+${props.student.user.phone_number}">+${props.student.user.phone_number}</a>`
-)
-
-const parentsIndividualWork = computed<IndividualWork[]>(() =>
-  props.student.individual_work.filter((individualWork) => individualWork.type === 'parents')
-)
-
-const studentsIndividualWork = computed<IndividualWork[]>(() =>
-  props.student.individual_work.filter((individualWork) => individualWork.type === 'students')
-)
-
-const familyMembers = computed(() => props.student.family_members)
-
-const mother = computed<(User & { pivot: FamilyMember }) | undefined>(() =>
-  familyMembers.value.find((familyMember) => familyMember.pivot.type === 'mother')
-)
-
-const father = computed<(User & { pivot: FamilyMember }) | undefined>(() =>
-  familyMembers.value.find((familyMember) => familyMember.pivot.type === 'father')
-)
-
-const otherFamilyMembers = computed(() =>
-  familyMembers.value.filter(
-    (familyMember) => familyMember.pivot.type !== 'mother' && familyMember.pivot.type !== 'father'
-  )
-)
-
 const otherFamilyMembersTextField = computed(() =>
-  otherFamilyMembers.value
+  props.student.family_members
+    .filter((familyMember) => familyMember.pivot.type !== 'father' && familyMember.pivot.type !== 'mother')
     .map((familyMember) => {
       let status = ''
-
       if (familyMember.pivot.type === 'brother') {
         status = 'брат'
       }
-
       if (familyMember.pivot.type === 'sister') {
         status = 'сестра'
       }
-
-      return `(${status}) ${UserService.info(familyMember)}`
+      return `(${status}) ${familyMember.info}`
     })
     .join('<br>')
+)
+
+const parentsIndividualWork = computed<IIndividualWork[]>(() =>
+  props.student.individual_work.filter((individualWork) => individualWork.type === 'parents')
+)
+
+const studentsIndividualWork = computed<IIndividualWork[]>(() =>
+  props.student.individual_work.filter((individualWork) => individualWork.type === 'students')
 )
 </script>

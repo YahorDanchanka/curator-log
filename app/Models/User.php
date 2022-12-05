@@ -13,6 +13,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $appends = ['info'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -42,7 +44,7 @@ class User extends Authenticatable
     protected function info(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => $this->full_name . ", {$this->birthday}, {$this->citizenship}, {$this->address}, {$this->job}"
+            get: fn ($value, $attributes) => $this->full_name . ", {$this->birthday}, {$this->citizenship}, {$this->address->to_string}, {$this->job}"
         );
     }
 
@@ -51,5 +53,10 @@ class User extends Authenticatable
         return Attribute::make(
             get: fn ($value, $attributes) => "{$this->surname} {$this->first_name} {$this->middle_name}"
         );
+    }
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
     }
 }
