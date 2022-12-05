@@ -18,11 +18,15 @@ export interface IUser {
 
 export interface IStudent {
   id: number
+  home_phone_number: string | null
   graduated: string
   relationship: string
-  hobbies: string
-  address: string
+  hobbies: string | null
+  address: string | null
   health: string
+  social_conditions: string | null
+  apprenticeship: string
+  certificate_date: string
   other_details: string | null
   user_id: number
   created_at: string | null

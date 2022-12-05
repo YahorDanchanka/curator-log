@@ -5,6 +5,7 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@prettier/plugin-php": "^0.19.2",
         "@quasar/vite-plugin": "^1.2.3",
         "@vitejs/plugin-vue": "^3.2.0",
         "axios": "^1.1.2",
@@ -29,6 +30,6 @@
         "singleQuote": true,
         "arrowParens": "always",
         "printWidth": 120,
-        "tabWidth": 2
+        "phpVersion": "8.1"
     }
 }

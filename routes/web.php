@@ -16,4 +16,4 @@ use App\Http\Controllers\StudentCardController;
 */
 
 Route::get('/', [MainController::class, 'index']);
-Route::get('/student-card/{id}', [StudentCardController::class, 'index']);
+Route::resource('/student-card', StudentCardController::class);
