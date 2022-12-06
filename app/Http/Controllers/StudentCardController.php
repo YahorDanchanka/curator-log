@@ -16,6 +16,8 @@ class StudentCardController extends Controller
 {
     public function index()
     {
+        $students = Student::all()->load('user', 'user.address', 'passport');
+        return Inertia::render('StudentCard/Index', compact('students'));
     }
 
     public function create()

@@ -33,6 +33,7 @@ export interface IStudent {
   updated_at: string | null
   mother: IUser | null
   father: IUser | null
+  family_members: IUser[]
 }
 
 export interface IAddress {
