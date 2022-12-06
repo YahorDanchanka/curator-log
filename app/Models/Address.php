@@ -11,11 +11,15 @@ class Address extends Model
     use HasFactory;
 
     protected $appends = ['to_string'];
+    protected $guarded = [];
 
     protected function toString(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => "{$this->region} область, {$this->district} район, {$this->residenceType} {$this->residence}, ул. {$this->street}"
+            get: fn(
+                $value,
+                $attributes,
+            ) => "{$this->region} область, {$this->district} район, {$this->residenceType} {$this->residence}, ул. {$this->street}",
         );
     }
 }

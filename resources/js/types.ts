@@ -20,7 +20,7 @@ export interface IStudent {
   id: number
   home_phone_number: string | null
   graduated: string
-  relationship: string
+  relationship: string | null
   hobbies: string | null
   address: string | null
   health: string

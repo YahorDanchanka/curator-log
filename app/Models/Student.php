@@ -11,6 +11,7 @@ class Student extends Model
     use HasFactory;
 
     protected $appends = ['mother', 'father'];
+    protected $guarded = [];
 
     public function user()
     {
@@ -50,14 +51,14 @@ class Student extends Model
     protected function mother(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => collect($this->familyMembers)->firstWhere('pivot.type', 'mother')
+            get: fn($value, $attributes) => collect($this->familyMembers)->firstWhere('pivot.type', 'mother'),
         );
     }
 
     protected function father(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => collect($this->familyMembers)->firstWhere('pivot.type', 'father')
+            get: fn($value, $attributes) => collect($this->familyMembers)->firstWhere('pivot.type', 'father'),
         );
     }
 }

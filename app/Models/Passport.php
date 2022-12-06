@@ -11,11 +11,15 @@ class Passport extends Model
     use HasFactory;
 
     protected $appends = ['to_string'];
+    protected $guarded = [];
 
     protected function toString(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => "{$this->series}{$this->number}, выдан «{$this->district_department}», дата выдачи: {$this->issue_date}"
+            get: fn(
+                $value,
+                $attributes,
+            ) => "{$this->series}{$this->number}, выдан «{$this->district_department}», дата выдачи: {$this->issue_date}",
         );
     }
 }

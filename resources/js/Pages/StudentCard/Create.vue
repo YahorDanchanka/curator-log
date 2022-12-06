@@ -1,7 +1,13 @@
 <template>
   <Head title="Журнал куратора - Создание карты персонифицированного учета" />
-  <q-form greedy>
+  <q-form greedy @submit.prevent="onSubmit">
     <div class="row q-col-gutter-md">
+      <div class="col-12"></div>
+      <div v-if="!isEmpty(errors)" class="col-12">
+        <q-banner inline-actions class="text-white bg-red">
+          <template v-for="errorList in errors"> {{ errorList.join('<br />') }}<br /> </template>
+        </q-banner>
+      </div>
       <div class="col-6">
         <q-input
           label="Фамилия"
@@ -60,7 +66,7 @@
         <q-input label="Домашний телефон" v-model.trim="student.home_phone_number" />
       </div>
       <div class="col-6">
-        <q-input label="Телефон" v-model.trim="user.phone_number" />
+        <q-input label="Телефон" mask="(##) ###-##-##" v-model.trim="user.phone_number" unmasked-value />
       </div>
       <div class="col-6">
         <q-select label="Область" v-model="address.region" :options="regions" />
@@ -181,9 +187,12 @@
 
 <script lang="ts" setup>
 import { computed, reactive, ref, watch } from 'vue'
-import { find, map } from 'lodash'
+import { find, map, isEmpty } from 'lodash'
 import { Head } from '@inertiajs/inertia-vue3'
 import BelarusData from '@/data/belarus.json'
+import { Inertia } from '@inertiajs/inertia'
+
+const props = defineProps<{ storeUrl: string; errors: { [key: string]: string[] } }>()
 
 const sameAddress = ref(false)
 
@@ -226,6 +235,16 @@ const passport = reactive({
 
 const regions = computed<string[]>(() => map(BelarusData.regions, 'name'))
 const districts = computed<string[]>(() => find(BelarusData.regions, ['name', address.region])?.districts || [])
+
+async function onSubmit() {
+  // @ts-ignore
+  Inertia.post(props.storeUrl, {
+    user,
+    student,
+    address,
+    passport,
+  })
+}
 
 watch(
   () => address.region,
