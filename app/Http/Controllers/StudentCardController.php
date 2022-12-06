@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StudentCardRequest;
 use App\Models\Address;
 use App\Models\Passport;
 use App\Models\Student;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
 class StudentCardController extends Controller
@@ -26,37 +25,9 @@ class StudentCardController extends Controller
         return Inertia::render('StudentCard/Create', compact('storeUrl'));
     }
 
-    public function store(Request $request)
+    public function store(StudentCardRequest $request)
     {
-        $validated = $request->validate([
-            'user.surname' => 'required',
-            'user.first_name' => 'required',
-            'user.middle_name' => 'required',
-            'user.sex' => ['required', Rule::in(['male', 'female'])],
-            'user.birthday' => 'required|date',
-            'user.citizenship' => 'required',
-            'user.job' => 'nullable',
-            'user.phone_number' => 'nullable',
-            'student.home_phone_number' => 'nullable',
-            'student.graduated' => 'required',
-            'student.relationship' => 'nullable',
-            'student.hobbies' => 'nullable',
-            'student.address' => 'nullable',
-            'student.health' => 'required',
-            'student.social_conditions' => 'nullable',
-            'student.apprenticeship' => 'required',
-            'student.certificate_date' => 'required|date',
-            'student.other_details' => 'nullable',
-            'address.region' => 'required',
-            'address.district' => 'required',
-            'address.residenceType' => 'required',
-            'address.residence' => 'required',
-            'address.street' => 'required',
-            'passport.series' => 'required',
-            'passport.number' => 'required',
-            'passport.district_department' => 'required',
-            'passport.issue_date' => 'required|date',
-        ]);
+        $validated = $request->validated();
 
         $login = Str::random(8);
         $user = User::create(
@@ -96,10 +67,29 @@ class StudentCardController extends Controller
 
     public function edit($id)
     {
+        $student = Student::find($id);
+        $user = $student->user;
+        $address = $user->address;
+        $passport = $student->passport;
+        $updateUrl = route('student-card.update', ['student_card' => $id]);
+        return Inertia::render('StudentCard/Update', compact('updateUrl', 'student', 'user', 'address', 'passport'));
     }
 
-    public function update(Request $request, $id)
+    public function update(StudentCardRequest $request, $id)
     {
+        $validated = $request->validated();
+
+        $student = Student::find($id);
+        $user = $student->user;
+        $address = $user->address;
+        $passport = $student->passport;
+
+        $student->update($validated['student']);
+        $user->update($validated['user']);
+        $address->update($validated['address']);
+        $passport->update($validated['passport']);
+
+        return Inertia::location(route('student-card.show', ['student_card' => $student->id]));
     }
 
     public function destroy($id)

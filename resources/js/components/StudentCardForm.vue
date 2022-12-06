@@ -226,7 +226,7 @@
         />
       </div>
       <div class="col-12">
-        <q-btn type="submit" color="primary" label="Создать" />
+        <q-btn type="submit" color="primary" label="Сохранить" />
       </div>
     </div>
   </q-form>
@@ -234,12 +234,12 @@
 
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
-import { find, map, isEmpty, merge } from 'lodash'
+import { find, map, merge } from 'lodash'
 import BelarusData from '@/data/belarus.json'
 
 const emit = defineEmits(['update:user', 'update:student', 'update:address', 'update:passport', 'submit'])
 const props = defineProps<{
-  user?: {
+  user: {
     surname: string
     first_name: string
     middle_name: string
@@ -248,7 +248,7 @@ const props = defineProps<{
     citizenship: string
     phone_number: string
   }
-  student?: {
+  student: {
     home_phone_number: string
     graduated: string
     address: string
@@ -259,14 +259,14 @@ const props = defineProps<{
     health: string
     apprenticeship: string
   }
-  address?: {
+  address: {
     region: string
     district: string
     residenceType: string
     residence: string
     street: string
   }
-  passport?: {
+  passport: {
     series: string
     number: string
     district_department: string
@@ -274,7 +274,7 @@ const props = defineProps<{
   }
 }>()
 
-const sameAddress = ref(false)
+const sameAddress = ref(props.student.address === null)
 
 const regions = computed<string[]>(() => map(BelarusData.regions, 'name'))
 const districts = computed<string[]>(() => find(BelarusData.regions, ['name', props.address.region])?.districts || [])

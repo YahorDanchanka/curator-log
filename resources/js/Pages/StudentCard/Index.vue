@@ -1,6 +1,13 @@
 <template>
   <Head title="Журнал куратора - Учащиеся" />
-  <q-table title="Учащиеся" row-key="name" :rows="students" :columns="columns" :visible-columns="visibleColumns">
+  <q-table
+    class="q-mb-md"
+    title="Учащиеся"
+    row-key="name"
+    :rows="students"
+    :columns="columns"
+    :visible-columns="visibleColumns"
+  >
     <template v-slot:top>
       <div class="q-table__title">Учащиеся</div>
       <q-space />
@@ -19,13 +26,42 @@
         options-dense
       />
     </template>
+
+    <template v-slot:header="props">
+      <q-tr :props="props">
+        <q-th v-for="col in props.cols" :key="col.name" :props="props">
+          {{ col.label }}
+        </q-th>
+        <q-th class="text-left">Действия</q-th>
+      </q-tr>
+    </template>
+
+    <template v-slot:body="props">
+      <q-tr :props="props">
+        <q-td v-for="col in props.cols" :key="col.name" :props="props">
+          {{ col.value }}
+        </q-td>
+        <q-td>
+          <q-btn
+            class="q-mr-sm"
+            color="primary"
+            icon="edit"
+            size="sm"
+            :href="`/student-card/${props.row.id}/edit`"
+            round
+          />
+          <q-btn color="negative" icon="delete" size="sm" round />
+        </q-td>
+      </q-tr>
+    </template>
   </q-table>
+  <q-btn label="Создать" color="primary" href="/student-card/create" />
 </template>
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import moment from 'moment'
-import { Head } from '@inertiajs/inertia-vue3'
+import { Head, Link } from '@inertiajs/inertia-vue3'
 import { IAddress, IPassport, IStudent, IUser } from '@/types'
 
 type IRow = IStudent & { user: IUser & { address: IAddress }; passport: IPassport }

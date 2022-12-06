@@ -65,6 +65,11 @@
   resolved "https://registry.yarnpkg.com/@quasar/vite-plugin/-/vite-plugin-1.2.3.tgz#7da3653afbf45b11e9c344192fff2b9a7ccf3650"
   integrity sha512-ErSyY3cHz40GBIQUmqSI8OzzshJM5pLq33Yq3NEtYdWYh1NuIc4C766xkatUdxvhX9sLNnQQZax2ysJ5u7kUJA==
 
+"@types/lodash@^4.14.191":
+  version "4.14.191"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.191.tgz#09511e7f7cba275acd8b419ddac8da9a6a79e2fa"
+  integrity sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==
+
 "@vitejs/plugin-vue@^3.2.0":
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-3.2.0.tgz#a1484089dd85d6528f435743f84cdd0d215bbb54"
