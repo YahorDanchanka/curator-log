@@ -50,7 +50,7 @@
             :href="`/student-card/${props.row.id}/edit`"
             round
           />
-          <q-btn color="negative" icon="delete" size="sm" round />
+          <q-btn color="negative" icon="delete" size="sm" round @click="deleteStudent(props.row.id)" />
         </q-td>
       </q-tr>
     </template>
@@ -63,6 +63,7 @@ import { ref, watch } from 'vue'
 import moment from 'moment'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import { IAddress, IPassport, IStudent, IUser } from '@/types'
+import { Inertia } from '@inertiajs/inertia'
 
 type IRow = IStudent & { user: IUser & { address: IAddress }; passport: IPassport }
 defineProps<{ students: IRow[] }>()
@@ -246,6 +247,10 @@ const visibleColumns = ref(
         'other_details',
       ]
 )
+
+function deleteStudent(id: number) {
+  Inertia.delete(`/student-card/${id}`)
+}
 
 watch(visibleColumns, () => {
   localStorage.setItem(visibleColumnsStorageKey, JSON.stringify(visibleColumns.value))

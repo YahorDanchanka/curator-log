@@ -68,6 +68,11 @@ class StudentCardController extends Controller
     public function edit($id)
     {
         $student = Student::find($id);
+
+        if (!$student) {
+            abort(404);
+        }
+
         $user = $student->user;
         $address = $user->address;
         $passport = $student->passport;
@@ -94,5 +99,13 @@ class StudentCardController extends Controller
 
     public function destroy($id)
     {
+        $student = Student::find($id);
+
+        if (!$student) {
+            abort(404);
+        }
+
+        $student->user->delete();
+        return Inertia::location(route('student-card.index'));
     }
 }

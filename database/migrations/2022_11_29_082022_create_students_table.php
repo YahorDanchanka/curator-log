@@ -19,7 +19,10 @@ return new class extends Migration {
             $table->string('apprenticeship');
             $table->date('certificate_date');
             $table->string('other_details')->nullable();
-            $table->foreignId('user_id')->constrained();
+            $table
+                ->foreignId('user_id')
+                ->constrained()
+                ->onDelete('cascade');
             $table->timestamps();
         });
     }
