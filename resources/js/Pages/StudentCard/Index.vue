@@ -45,6 +45,14 @@
           <q-btn
             class="q-mr-sm"
             color="primary"
+            icon="visibility"
+            size="sm"
+            :href="`/student-card/${props.row.id}`"
+            round
+          />
+          <q-btn
+            class="q-mr-sm"
+            color="primary"
             icon="edit"
             size="sm"
             :href="`/student-card/${props.row.id}/edit`"
