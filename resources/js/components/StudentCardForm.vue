@@ -69,13 +69,30 @@
         />
       </div>
       <div class="col-6">
-        <q-input
+        <!--        <q-input-->
+        <!--          label="Телефон"-->
+        <!--          mask="(##) ###-##-##"-->
+        <!--          :model-value="props.user.phone_number"-->
+        <!--          unmasked-value-->
+        <!--          @update:model-value="(val) => emit('update:user', merge(props.user, { phone_number: val }))"-->
+        <!--        />-->
+        <q-field
           label="Телефон"
-          mask="(##) ###-##-##"
           :model-value="props.user.phone_number"
-          unmasked-value
           @update:model-value="(val) => emit('update:user', merge(props.user, { phone_number: val }))"
-        />
+        >
+          <template v-slot:control="{ id, floatingLabel, modelValue, emitValue }">
+            <input
+              :id="id"
+              class="q-field__input"
+              data-maska="375-##-###-##-##"
+              :value="modelValue"
+              v-maska
+              data-maska-eage
+              @change="(e) => emitValue(e.target.value.match(/\d+/g).join(''))"
+            />
+          </template>
+        </q-field>
       </div>
       <div class="col-6">
         <q-select
@@ -235,6 +252,7 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import { find, map, merge } from 'lodash'
+import { vMaska } from 'maska'
 import BelarusData from '@/data/belarus.json'
 
 const emit = defineEmits(['update:user', 'update:student', 'update:address', 'update:passport', 'submit'])
