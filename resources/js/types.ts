@@ -75,7 +75,12 @@ export interface IIndividualWork {
 }
 
 export interface IFamilyMember {
+  id: number
   type: 'mother' | 'father' | 'brother' | 'sister'
+  student_id: number
+  user_id: number
+  created_at: string | null
+  updated_at: string | null
 }
 
 export interface IPassport {

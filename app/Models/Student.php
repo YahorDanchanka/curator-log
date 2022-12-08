@@ -20,7 +20,9 @@ class Student extends Model
 
     public function familyMembers()
     {
-        return $this->belongsToMany(User::class)->withPivot('type');
+        return $this->belongsToMany(User::class)
+            ->withPivot('type')
+            ->withTimestamps();
     }
 
     public function achievements()

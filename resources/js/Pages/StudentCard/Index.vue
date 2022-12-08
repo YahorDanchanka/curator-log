@@ -58,20 +58,45 @@
             :href="`/student-card/${props.row.id}/edit`"
             round
           />
+          <q-btn
+            class="q-mr-sm"
+            color="primary"
+            icon="person_add"
+            size="sm"
+            round
+            @click="showRelativeForm(props.row.id)"
+          />
           <q-btn color="negative" icon="delete" size="sm" round @click="deleteStudent(props.row.id)" />
         </q-td>
       </q-tr>
     </template>
   </q-table>
   <q-btn label="Создать" color="primary" href="/student-card/create" />
+  <q-dialog v-model="relativeForm.visible">
+    <q-card>
+      <q-card-section>
+        <div class="text-h6">Создание родственника</div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        <RelativeForm
+          :user="relative"
+          :family-member="familyMember"
+          :address="address"
+          @submit="onRelativeFormSubmit"
+        />
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import moment from 'moment'
 import { Head, Link } from '@inertiajs/inertia-vue3'
 import { IAddress, IPassport, IStudent, IUser } from '@/types'
 import { Inertia } from '@inertiajs/inertia'
+import RelativeForm from '@/components/RelativeForm.vue'
 
 type IRow = IStudent & { user: IUser & { address: IAddress }; passport: IPassport }
 defineProps<{ students: IRow[] }>()
@@ -256,8 +281,51 @@ const visibleColumns = ref(
       ]
 )
 
+const relativeForm = reactive({
+  visible: false,
+  studentId: 0,
+})
+
+const relative = reactive({
+  surname: '',
+  first_name: '',
+  middle_name: '',
+  sex: 'male',
+  birthday: '',
+  citizenship: '',
+  job: '',
+  phone_number: '',
+})
+
+const familyMember = reactive({
+  type: 'mother',
+})
+
+const address = reactive({
+  region: 'Гомельская',
+  district: '',
+  residenceType: 'Город',
+  residence: '',
+  street: '',
+})
+
 function deleteStudent(id: number) {
   Inertia.delete(`/student-card/${id}`)
+}
+
+function showRelativeForm(studentId: number) {
+  relativeForm.visible = true
+  relativeForm.studentId = studentId
+}
+
+function onRelativeFormSubmit() {
+  // @ts-ignore
+  Inertia.post('/relatives', {
+    relative,
+    familyMember,
+    address,
+    studentId: relativeForm.studentId,
+  })
 }
 
 watch(visibleColumns, () => {

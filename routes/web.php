@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\StudentCardController;
+use App\Http\Controllers\RelativeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,4 @@ use App\Http\Controllers\StudentCardController;
 
 Route::get('/', [MainController::class, 'index']);
 Route::resource('/student-card', StudentCardController::class);
+Route::resource('/relatives', RelativeController::class);

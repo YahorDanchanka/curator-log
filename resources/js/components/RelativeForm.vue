@@ -38,6 +38,7 @@
           ]"
           emit-value
           map-options
+          hide-bottom-space
           @update:model-value="(val) => emit('update:user', merge(props.user, { sex: val }))"
         />
       </div>
@@ -62,10 +63,19 @@
         />
       </div>
       <div class="col-6">
-        <q-input
-          label="Домашний телефон"
-          :model-value="props.student.home_phone_number"
-          @update:model-value="(val) => emit('update:student', merge(props.student, { home_phone_number: val }))"
+        <q-select
+          label="Тип родства"
+          :model-value="props.familyMember.type"
+          :options="[
+            { label: 'Мать', value: 'mother' },
+            { label: 'Отец', value: 'father' },
+            { label: 'Брат', value: 'brother' },
+            { label: 'Сестра', value: 'sister' },
+          ]"
+          emit-value
+          map-options
+          hide-bottom-space
+          @update:model-value="(val) => emit('update:familyMember', merge(props.familyMember, { type: val }))"
         />
       </div>
       <div class="col-6">
@@ -86,6 +96,14 @@
             />
           </template>
         </q-field>
+      </div>
+      <div class="col-6">
+        <q-input
+          label="Работа"
+          :model-value="props.user.job"
+          hide-bottom-space
+          @update:model-value="(val) => emit('update:user', merge(props.user, { job: val }))"
+        />
       </div>
       <div class="col-6">
         <q-select
@@ -131,110 +149,6 @@
           @update:model-value="(val) => emit('update:address', merge(props.address, { street: val }))"
         />
       </div>
-      <div class="col-6">
-        <q-input
-          label="Окончил УО"
-          :model-value="props.student.graduated"
-          :rules="[(val) => (val && val.length > 0) || 'Необходимо заполнить «Окончил УО».']"
-          hide-bottom-space
-          @update:model-value="(val) => emit('update:student', merge(props.student, { graduated: val }))"
-        />
-      </div>
-      <div class="col-6 text-center">
-        <q-checkbox label="Там же" v-model="sameAddress" />
-      </div>
-      <div class="col-6">
-        <q-input
-          label="Адрес"
-          :model-value="props.student.address"
-          :disable="sameAddress"
-          @update:model-value="(val) => emit('update:student', merge(props.student, { address: val }))"
-        />
-      </div>
-      <div class="col-6">
-        <q-input
-          label="Социальные условия"
-          :model-value="props.student.social_conditions"
-          @update:model-value="(val) => emit('update:student', merge(props.student, { social_conditions: val }))"
-        />
-      </div>
-      <div class="col-6">
-        <q-input
-          label="Увлечения"
-          :model-value="props.student.hobbies"
-          @update:model-value="(val) => emit('update:student', merge(props.student, { hobbies: val }))"
-        />
-      </div>
-      <div class="col-6">
-        <q-input
-          label="Другая информация"
-          :model-value="props.student.other_details"
-          @update:model-value="(val) => emit('update:student', merge(props.student, { other_details: val }))"
-        />
-      </div>
-      <div class="col-6">
-        <q-input
-          type="date"
-          label="Дата справки"
-          :model-value="props.student.certificate_date"
-          :rules="[(val) => (val && val.length > 0) || 'Необходимо заполнить «Дата справки».']"
-          stack-label
-          @update:model-value="(val) => emit('update:student', merge(props.student, { certificate_date: val }))"
-        />
-      </div>
-      <div class="col-6">
-        <q-select
-          label="Группа здоровья"
-          :model-value="props.student.health"
-          :options="['Основная', 'Подготовительная', 'Спец-мед группа', 'Освобождён от физры']"
-          @update:model-value="(val) => emit('update:student', merge(props.student, { health: val }))"
-        />
-      </div>
-      <div class="col-6">
-        <q-select
-          label="Основа"
-          :model-value="props.student.apprenticeship"
-          :options="['Бюджет', 'Внебюджет']"
-          @update:model-value="(val) => emit('update:student', merge(props.student, { apprenticeship: val }))"
-        />
-      </div>
-      <div class="col-6">
-        <q-select
-          label="Серия паспорта"
-          :model-value="props.passport.series"
-          :options="['AB', 'BM', 'HB', 'KH', 'MP', 'MC', 'KB', 'PP', 'SP', 'DP']"
-          @update:model-value="(val) => emit('update:passport', merge(props.passport, { series: val }))"
-        />
-      </div>
-      <div class="col-6">
-        <q-input
-          label="Номер паспорта / личный номер"
-          :model-value="props.passport.number"
-          :rules="[(val) => (val && val.length > 0) || 'Необходимо заполнить «Номер паспорта / личный номер».']"
-          hide-bottom-space
-          @update:model-value="(val) => emit('update:passport', merge(props.passport, { number: val }))"
-        />
-      </div>
-      <div class="col-6">
-        <q-input
-          label="РОВД"
-          :model-value="props.passport.district_department"
-          :rules="[(val) => (val && val.length > 0) || 'Необходимо заполнить «РОВД».']"
-          hide-bottom-space
-          @update:model-value="(val) => emit('update:passport', merge(props.passport, { district_department: val }))"
-        />
-      </div>
-      <div class="col-6">
-        <q-input
-          type="date"
-          label="Дата выдачи паспорта"
-          :model-value="props.passport.issue_date"
-          :rules="[(val) => (val && val.length > 0) || 'Необходимо заполнить «Дата выдачи паспорта».']"
-          hide-bottom-space
-          stack-label
-          @update:model-value="(val) => emit('update:passport', merge(props.passport, { issue_date: val }))"
-        />
-      </div>
       <div class="col-12">
         <q-btn type="submit" color="primary" label="Сохранить" />
       </div>
@@ -243,12 +157,12 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { find, map, merge } from 'lodash'
 import { vMaska } from 'maska'
 import BelarusData from '@/data/belarus.json'
 
-const emit = defineEmits(['update:user', 'update:student', 'update:address', 'update:passport', 'submit'])
+const emit = defineEmits(['update:user', 'update:familyMember', 'update:address', 'submit'])
 const props = defineProps<{
   user: {
     surname: string
@@ -257,18 +171,11 @@ const props = defineProps<{
     sex: string
     birthday: string
     citizenship: string
+    job: string | null
     phone_number: string
   }
-  student: {
-    home_phone_number: string
-    graduated: string
-    address: string
-    social_conditions: string
-    hobbies: string
-    other_details: string
-    certificate_date: string
-    health: string
-    apprenticeship: string
+  familyMember: {
+    type: string
   }
   address: {
     region: string
@@ -277,15 +184,7 @@ const props = defineProps<{
     residence: string
     street: string
   }
-  passport: {
-    series: string
-    number: string
-    district_department: string
-    issue_date: string
-  }
 }>()
-
-const sameAddress = ref(props.student.address === null)
 
 const regions = computed<string[]>(() => map(BelarusData.regions, 'name'))
 const districts = computed<string[]>(() => find(BelarusData.regions, ['name', props.address.region])?.districts || [])
@@ -296,10 +195,4 @@ watch(
     emit('update:address', merge(props.address, { district: '' }))
   }
 )
-
-watch(sameAddress, (val) => {
-  if (val) {
-    emit('update:student', merge(props.student, { address: '' }))
-  }
-})
 </script>
